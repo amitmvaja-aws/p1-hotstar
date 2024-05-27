@@ -15,7 +15,7 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'main', url: 'https://github.com/manishaacharya111/Project3-Hotstar-Clone.git'
+                git branch: 'main', url: 'https://github.com/amitmvaja-aws/p1-hotstar.git'
             }
         }
         stage("Sonarqube Analysis "){
@@ -40,7 +40,7 @@ pipeline{
         }
         stage('OWASP FS SCAN') {
             steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', nvdCredentialsId: 'NVDkey', odcInstallation: 'DP-Check'
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', nvdCredentialsId: 'owasp', odcInstallation: 'DP-Check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
@@ -61,8 +61,8 @@ pipeline{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
                        sh "docker build -t hotstar ."
-                       sh "docker tag hotstar merry211/hotstar:latest "
-                       sh "docker push merry211/hotstar:latest"
+                       sh "docker tag hotstar amitmvaja/hotstar:latest "
+                       sh "docker push amitmvaja/hotstar:latest"
                     }
                 }
             }
@@ -71,9 +71,9 @@ pipeline{
             steps {
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                       sh 'docker-scout quickview merry211/hotstar:latest'
-                       sh 'docker-scout cves merry211/hotstar:latest'
-                       sh 'docker-scout recommendations merry211/hotstar:latest'
+                       sh 'docker-scout quickview amitmvaja/hotstar:latest'
+                       sh 'docker-scout cves amitmvaja/hotstar:latest'
+                       sh 'docker-scout recommendations amitmvaja/hotstar:latest'
                    }
                 }
             }
